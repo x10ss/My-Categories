@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Upload CSV";
+}
+@using MyCategories.Models
+@model IEnumerable<TreeNode>
+
+
+@helper DisplayTree(IEnumerable<TreeNode> elements)
+{
+    <ul>
+        @foreach (var element in elements)
+        {
+            <li>
+                @element.Name
+                @{
+                    var children = Model.Where(e => e.ParentId == element.Id);
+                    if (children.Count() > 0)
+                    {
+                        @DisplayTree(children)
+                    }
+                }
+            </li>
+        }
+        </ul>
+}
+<h2>@ViewBag.Title.</h2>
+<div>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="postedFile" />
+        <input type="submit" value="Import" />
+    }
+</div>
+<div>
+    @if (Model.Count() > 0)
+    {
+        @DisplayTree(Model.Where(e => e.ParentId == null))
+    }
+</div>

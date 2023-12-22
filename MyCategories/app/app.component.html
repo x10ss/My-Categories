@@ -1,0 +1,9 @@
+<ng-template #List let-items>
+    <ul>
+        <li *ngFor="let item of items">
+            {{item.name}}
+            <ng-container *ngTemplateOutlet="List; context:{ $implicit: item.items }"></ng-container>
+        </li>
+    </ul>
+</ng-template>
+<ng-container *ngTemplateOutlet="List; context:{ $implicit: tree | converter }"></ng-container>
